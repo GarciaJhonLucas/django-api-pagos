@@ -5,8 +5,8 @@
 Como obtener este proyecto en su directorio:
 
 ```sh
-$ git clone https://github.com/GarciaJhonLucas/django-api-rest-pagos.git
-$ cd django-api-rest-pagos
+$ git clone https://github.com/GarciaJhonLucas/django-api-pagos.git
+$ cd django-api-pagos
 ```
 
 Crear un entorno virtual y activarlo para posterior instalar las librerias:
@@ -51,10 +51,6 @@ Navegue hasta `http://127.0.0.1:8000/`
 
 Ahora para hacer uso del proyecto, crear un proyecto navege hacia `http://127.0.0.1:8000/login`.
 
-Selecionas que no tienes cuenta para luego ir a `http://127.0.0.1:8000/register/` 
+Selecionas que no tienes cuenta para luego ir a `http://127.0.0.1:8000/singup/` 
 
-Crear un usuario con los datos que te pide, luego te redirige al login
-
-Ingresas tus datos recien creados, te llevara a `http://127.0.0.1:8000/create/` 
-
-Rellenas los datos y listo ya se crea un proyecto, el cual podras ver en `http://127.0.0.1:8000/` ****
+Selecionas que no tienes cuenta para luego ir a `http://127.0.0.1:8000/documentation/` 

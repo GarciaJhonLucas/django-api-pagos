@@ -10,11 +10,12 @@ from rest_framework.response import Response
 from rest_framework import viewsets
 from .tokens import create_jwt_pair_for_user
 from .serializers import SignUpSerializer, GetUserSerializer
+from .pagination import StandardResultsSetPagination
+
 from .models import User
 
 
 # Create your views here.
-
 class SignUpView(generics.GenericAPIView):
     serializer_class = SignUpSerializer
 
@@ -53,3 +54,4 @@ class LoginView(APIView):
 class GetUsers(viewsets.ReadOnlyModelViewSet):
     serializer_class = GetUserSerializer
     queryset = User.objects.all()
+    pagination_class = StandardResultsSetPagination
