@@ -6,9 +6,3 @@ class PaymentSerializer(serializers.ModelSerializer):
         model = Payment
         fields = '__all__'
         read_only_fields = 'payment_date'
-
-
-class ServiceSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Services
-        fields = "__all__"

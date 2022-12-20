@@ -30,13 +30,6 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
-LOCAL_APPS=[
-    'users.apps.UsersConfig',
-    'services.apps.ServicesConfig',
-    'payments.apps.PaymentsConfig',
-]
-
-# Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -47,6 +40,9 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'rest_framework.authtoken',
+    'users',
+    'services',
+    'payments'
 ]
 
 MIDDLEWARE = [
@@ -144,7 +140,9 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_THROTTLE_RATES':
     {
-        'user': '1000/day',
+        'payments': '1000/day',
+        'services': '2000/day',
+        'user': '2000/day',
     }
 }
 
