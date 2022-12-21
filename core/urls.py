@@ -21,25 +21,26 @@ from django.contrib import admin
 from rest_framework import permissions
 
 schema_view = get_schema_view(
-    openapi.Info(
-        title="API Pagos de Servicios Streaming",
-        default_version="v2",
-        description="Django Rest Framework Silabuz",
-        terms_of_service="https://www.google.com/policies/terms/",
-        contact=openapi.Contact(email="contact@snippets.local"),
-        license=openapi.License(name="BSD License"),
-    ),
-    public=True,
-    permission_classes=[permissions.AllowAny],
+   openapi.Info(
+      title="Payment API",
+      default_version='v1',
+      description="Proyecto API de Silabuz",
+      terms_of_service="https://www.google.com/policies/terms/",
+      contact=openapi.Contact(email="contact@snippets.local"),
+      license=openapi.License(name="BSD License"),
+   ),
+   public=True,
+   permission_classes=[permissions.AllowAny],
 )
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', include('client.urls')),
     path('users/', include('users.urls')),
     path('api-payments/', include('payments.urls')),
     path('api-services/', include('services.urls')),
     re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     re_path(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     re_path(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
-    path('', include('client.urls')),
 ]
