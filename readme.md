@@ -23,7 +23,7 @@ $ source env/bin/activate
 Luego instalar las librerias:
 
 ```sh
-(env) $ pip install -r libs.txt
+(env) $ pip install -r requirements.txt
 ```
 
 Observe el `(env)` delante de la linea de su terminal. Esto indica que esta sesión de terminal opera en un `entorno virtual` configurado por `virtualenv`.
@@ -49,8 +49,8 @@ Una vez concluido, procedemos a iniciar la app
 
 Navegue hasta `http://127.0.0.1:8000/`
 
+Revise las guias o lea la documentacion
+
 Ahora para hacer uso del proyecto, crear un proyecto navege hacia `http://127.0.0.1:8000/login`.
 
 Selecionas que no tienes cuenta para luego ir a `http://127.0.0.1:8000/singup/` 
-
-Selecionas que no tienes cuenta para luego ir a `http://127.0.0.1:8000/documentation/` 
