@@ -1,17 +1,16 @@
 from django.shortcuts import render
 from django.shortcuts import redirect
 from django.contrib.auth import authenticate
+from .tokens import create_jwt_pair_for_user
 
+from rest_framework import generics, status
 from rest_framework.views import APIView
 from rest_framework.request import Request
-from rest_framework import generics, status
 from rest_framework.response import Response
 
 from rest_framework import viewsets
-from .tokens import create_jwt_pair_for_user
-from .serializers import SignUpSerializer, GetUserSerializer
+from .serializers import SignUpSerializer, GetUserSerializer, LoginSerializer
 from .pagination import StandardResultsSetPagination
-
 from .models import User
 
 
@@ -31,8 +30,9 @@ class SignUpView(generics.GenericAPIView):
         return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+# Creacion de la vista para el login
 class LoginView(APIView):
-
+    serializer_class=LoginSerializer
     def post(self, request: Request):
         email = request.data.get("email")
         password = request.data.get("password")
@@ -51,6 +51,7 @@ class LoginView(APIView):
         return Response(data=content, status=status.HTTP_200_OK)
 
 
+# Obtener todos los usuarios registrados en la api
 class GetUsers(viewsets.ReadOnlyModelViewSet):
     serializer_class = GetUserSerializer
     queryset = User.objects.all()

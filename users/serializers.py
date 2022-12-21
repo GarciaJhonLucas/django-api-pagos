@@ -15,19 +15,18 @@ class SignUpSerializer(serializers.ModelSerializer):
         fields = ["email", "username", "password"]
 
     def validate(self, attrs):
-
         email_exists = User.objects.filter(email=attrs["email"]).exists()
         if email_exists:
             raise ValidationError("El correo ya fue registrado.")
         return super().validate(attrs)
-
+    
+    
     def create(self, validated_data):
         password = validated_data.pop("password")
         user = super().create(validated_data)
         user.set_password(password)
         user.save()
         Token.objects.create(user=user)
-
         return user
     
 
@@ -40,3 +39,12 @@ class GetUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ["email", "username", "password"]
+
+
+class LoginSerializer(serializers.ModelSerializer):
+    email = serializers.CharField(max_length=80)
+    password = serializers.CharField(min_length=8)
+
+    class Meta:
+        model = User
+        fields = ["email", "password"]

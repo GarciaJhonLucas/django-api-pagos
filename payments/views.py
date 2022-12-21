@@ -1,43 +1,71 @@
 from django.shortcuts import render
 
+from rest_framework import filters
+from rest_framework import viewsets
 from rest_framework.views import APIView
 from .pagination import StandardResultsSetPagination
-from rest_framework.permissions import IsAuthenticated
-
-from rest_framework import viewsets
-from .models import Payment
-from .serializer import PaymentSerializer
-from rest_framework import filters
-from rest_framework.permissions import IsAuthenticated
+from .models import Payment, Pagos, Payment_user, Expired_payment
+from rest_framework.permissions import AllowAny,IsAdminUser,IsAuthenticated
+from .serializer import PaymentSerializer, PagosSerializer, PaymentUserSerializer, ExpiredPaymentsSerializer
 
 
-# Create your views here.
+# v1 Project
+class PagoViewSet(viewsets.ModelViewSet):
+    queryset = Pagos.objects.get_queryset().order_by('id')
+    serializer_class = PagosSerializer
+    pagination_class = StandardResultsSetPagination
+    filter_backends = [filters.SearchFilter]
+    permission_classes = [IsAuthenticated]
+    search_fields = ['usuario', 'fecha_pago', 'servicios']
+    throttle_classes = 'Pagos'
+
+
+# v2 Project
 class PaymentsViewSet(viewsets.ModelViewSet):
     queryset = Payment.objects.all()
     serializer_class = PaymentSerializer
     pagination_class = StandardResultsSetPagination
     filter_backends = [filters.SearchFilter]
     permission_classes = [IsAuthenticated]
-    search_fields = ['user', 'payment_date', 'services']
-    throttle_classes = 'payments'
+    search_fields = ['users', 'payment_date', 'amount']
+    throttle_classes = 'Payment'
+    
 
-
-class PagoViewSet(viewsets.ModelViewSet):
-    queryset = Payment.objects.get_queryset().order_by('id')
-    serializer_class = PaymentSerializer
+class PaymentUserViewSet(viewsets.ModelViewSet):
+    queryset = Payment_user.objects.all()
+    serializer_class = PaymentUserSerializer
     pagination_class = StandardResultsSetPagination
     filter_backends = [filters.SearchFilter]
     permission_classes = [IsAuthenticated]
-    search_fields = ['user', 'payment_date', 'services']
-    throttle_classes = 'payments'
+    search_fields = ['user_id', 'service_id', 'paymentDate']
+    throttle_classes = 'Payment_user'
     
-    
-class ExpiredPaymentsViewSet(APIView):
-    queryset = Payment.objects.get_queryset().order_by('id')
-    serializer_class = PaymentSerializer
+    def get_permissions(self):
+        if self.action == "list":
+            permission_classes = [AllowAny,]
+        elif self.action == "create":
+            permission_classes = [AllowAny,]
+        else:
+            permission_classes = [IsAdminUser,]
+
+        return [permission() for permission in permission_classes]
+   
+
+class ExpiredPaymentsViewSet(viewsets.ModelViewSet):
+    queryset = Expired_payment.objects.get_queryset().order_by('id')
+    serializer_class = ExpiredPaymentsSerializer
     pagination_class = StandardResultsSetPagination
     filter_backends = [filters.SearchFilter]
     permission_classes = [IsAuthenticated]
-    
-    search_fields = ['pay_user_id']
+    search_fields = ['penalty_fee_amount', 'pay_user_id']
     throttle_classes = 'Expired_payments'
+
+    def get_permissions(self):
+        if self.action == "list":
+            permission_classes = [IsAuthenticated,]
+        elif self.action == "create":
+            permission_classes = [IsAdminUser,]
+        else:
+            permission_classes = [IsAdminUser,]
+
+        return [permission() for permission in permission_classes]
