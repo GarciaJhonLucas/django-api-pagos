@@ -15,23 +15,20 @@ class ServiceViewSet_v1(viewsets.ModelViewSet):
     serializer_class= ServiceSerializer
     filter_backends = (DjangoFilterBackend,)
     filterset_fields = ('name', 'description')
-    throttle_scope = 'service'
     pagination_class = StandardResultsSetPagination
     permission_classes = [IsAuthenticated]
-
 
 
 class ServiceViewSet(viewsets.ModelViewSet):
     serializer_class = ServiceSerializer
     queryset = Services.objects.all()
-    throttle_scope = 'service'
     pagination_class= StandardResultsSetPagination
 
     def get_permissions(self):
-        if self.action == "list":
-            permission_classes = [IsAuthenticated,]
+        if self.action not in ['destroy','partial_update','update','create']:
+            permission_classes = [IsAuthenticated]
         else:
-            permission_classes = [IsAdminUser,]
+            permission_classes = [IsAdminUser]
 
         return [permission() for permission in permission_classes]
 

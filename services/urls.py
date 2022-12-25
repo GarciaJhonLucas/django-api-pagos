@@ -8,7 +8,7 @@ router.register(r'v1/service', ServiceViewSet_v1)
 router.register(r'v2/service', ServiceViewSet)
 
 urlpatterns=[
-    re_path(r'v2/services',GetAllServiceView.as_view()),
+    re_path(r'v2/service',GetAllServiceView.as_view()),
 ]
 
 urlpatterns += router.urls

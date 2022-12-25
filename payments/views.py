@@ -26,28 +26,29 @@ class PaymentsViewSet(viewsets.ModelViewSet):
     serializer_class = PaymentSerializer
     pagination_class = StandardResultsSetPagination
     filter_backends = [filters.SearchFilter]
-    permission_classes = [IsAuthenticated]
-    search_fields = ['users', 'payment_date', 'amount']
-    throttle_classes = 'Payment'
+    search_fields = ['payment_date', 'amount']
     
+    def get_permissions(self):
+        if self.action in ['partial_update','update','destroy']:
+            permission_classes = [IsAdminUser]
+        else:
+            permission_classes = [IsAuthenticated]     
+        return [permission() for permission in permission_classes]
+
 
 class PaymentUserViewSet(viewsets.ModelViewSet):
     queryset = Payment_user.objects.all()
     serializer_class = PaymentUserSerializer
     pagination_class = StandardResultsSetPagination
     filter_backends = [filters.SearchFilter]
-    permission_classes = [IsAuthenticated]
     search_fields = ['user_id', 'service_id', 'paymentDate']
-    throttle_classes = 'Payment_user'
+    http_method_names=['get','post']
     
     def get_permissions(self):
-        if self.action == "list":
-            permission_classes = [AllowAny,]
-        elif self.action == "create":
-            permission_classes = [AllowAny,]
+        if self.action in ["list", "create"]:
+            permission_classes = [AllowAny]
         else:
-            permission_classes = [IsAdminUser,]
-
+            permission_classes = [IsAdminUser]
         return [permission() for permission in permission_classes]
    
 
@@ -55,17 +56,10 @@ class ExpiredPaymentsViewSet(viewsets.ModelViewSet):
     queryset = Expired_payment.objects.get_queryset().order_by('id')
     serializer_class = ExpiredPaymentsSerializer
     pagination_class = StandardResultsSetPagination
-    filter_backends = [filters.SearchFilter]
-    permission_classes = [IsAuthenticated]
-    search_fields = ['penalty_fee_amount', 'pay_user_id']
-    throttle_classes = 'Expired_payments'
 
     def get_permissions(self):
         if self.action == "list":
             permission_classes = [IsAuthenticated,]
-        elif self.action == "create":
-            permission_classes = [IsAdminUser,]
         else:
             permission_classes = [IsAdminUser,]
-
         return [permission() for permission in permission_classes]
